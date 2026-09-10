@@ -16,8 +16,11 @@
         document.documentElement.setAttribute('data-theme', _p === 'light' ? 'light' : 'dark');
       } catch (e) {}
     </script>
-  </head>
   <body>
+    <!-- ── Ambient overlays (scanlines & vignette) ── -->
+    <div class="scanlines" aria-hidden="true"></div>
+    <div class="vignette" aria-hidden="true"></div>
+
     <!-- ── Header ─────────────────────────────────────────────────────────── -->
     <header class="masthead">
       <div class="masthead-in">
