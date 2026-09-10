@@ -191,11 +191,13 @@
     // State
     var curCol = 0;
     var y = marginT;
+    var colStartY = marginT; // updated after header is drawn
 
     function newPage() {
       doc.addPage();
       y = marginT;
       curCol = 0;
+      colStartY = marginT; // no header on subsequent pages
     }
 
     function nextCol() {
@@ -203,7 +205,7 @@
       if (curCol >= cols) {
         newPage();
       } else {
-        y = marginT;
+        y = colStartY; // start below header, not at the very top
       }
     }
 
@@ -252,8 +254,8 @@
     // Reset text color
     doc.setTextColor(0, 0, 0);
 
-    // If multi-column, record the starting Y for columns
-    var colStartY = y;
+    // Record where columns should start (below the header)
+    colStartY = y;
 
     // ── Notes ──
     ordered.forEach(function (note) {
