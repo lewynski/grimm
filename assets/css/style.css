@@ -624,49 +624,86 @@ p { margin: 0; }
     display: none !important;
   }
 
-  /* Force the entire page to white background, black text — no dark mode */
+  /* Force fully white / black — no dark mode */
   html, body {
     background: #ffffff !important;
     color: #000000 !important;
-    padding: 1.2cm 1.4cm;
+    padding: 1.2cm 1.6cm;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
 
-  /* Override all CSS variables to light/white values for print */
   * {
     background-color: transparent !important;
     color: #000000 !important;
     box-shadow: none !important;
   }
 
+  /* Title */
   .notes-heading {
     padding-top: 0;
     color: #000000 !important;
-    font-size: 24pt;
+    font-size: 22pt;
+    font-weight: 700;
+    margin-bottom: 4px;
   }
 
-  .notes-meta { color: #555555 !important; }
+  .notes-meta {
+    color: #444444 !important;
+    font-size: 10pt;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #999999;
+  }
 
+  /* Column layout */
   .notes-grid {
     columns: var(--print-cols, 1);
-    column-gap: 1.5em;
+    column-gap: 2em;
     display: block;
   }
 
+  /* No cards — just flat content flowing on the page */
   .note-card {
     break-inside: avoid;
-    margin-bottom: 1em;
-    background: #ffffff !important;
-    border: 1px solid #cccccc !important;
-    border-left: 3px solid #5b3fa6 !important;
-    border-radius: 10px;
-    padding: 14px 16px 14px 18px;
+    margin-bottom: 14px;
+    background: transparent !important;
+    border: none !important;
+    border-left: none !important;
+    border-radius: 0;
+    padding: 0;
   }
 
-  .note-label  { color: #5b3fa6 !important; font-size: 10pt; font-weight: 700; }
-  .note-source { color: #888888 !important; font-size: 9pt; }
-  .note-bullet { color: #000000 !important; font-size: 10.5pt; line-height: 1.5; }
+  /* Page label as a bold inline heading */
+  .note-header {
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .note-label {
+    color: #000000 !important;
+    font-size: 11pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+
+  .note-source {
+    color: #666666 !important;
+    font-size: 8.5pt;
+    opacity: 1 !important;
+  }
+
+  /* Plain text bullets — no markers, no colours */
+  .note-bullets {
+    gap: 3px;
+  }
+
+  .note-bullet {
+    color: #000000 !important;
+    font-size: 10pt;
+    line-height: 1.45;
+  }
 }
 
 /* ── Responsive ───────────────────────────────────────────────────────────── */
