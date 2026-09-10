@@ -35,10 +35,17 @@
     for (var i = 0; i < links.length; i += 1) {
       try {
         var res = await fetch(links[i].href);
-        if (res.ok) return await res.text();
+        if (res.ok) {
+          var css = await res.text();
+          // Ensure the offline copy also suppresses browser print headers/footers
+          if (css.indexOf('@page') < 0) {
+            css = '@page { margin: 0; }\n' + css;
+          }
+          return css;
+        }
       } catch (err) { /* skip */ }
     }
-    return '';
+    return '@page { margin: 0; }';
   }
 
   /** Grabs the source text of a <script src="..."> tag. */

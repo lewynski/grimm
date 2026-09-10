@@ -440,11 +440,11 @@ p { margin: 0; }
   margin-bottom: 28px;
 }
 
-/* Grid of note cards */
+/* Grid of note cards — 2 columns by default */
 .notes-grid {
   display: grid;
   gap: 16px;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(2, 1fr);
 }
 
 /* ── Note card ────────────────────────────────────────────────────────────── */
@@ -459,54 +459,42 @@ p { margin: 0; }
 
 .note-header {
   display: flex;
-  align-items: baseline;
-  gap: 10px;
-  margin-bottom: 12px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 3px;
+  margin-bottom: 14px;
 }
 
 .note-label {
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 13px;
+  font-weight: 700;
   color: var(--accent-bar);
-  letter-spacing: 0.01em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 
 .note-source {
   font-size: 12px;
-  color: var(--soft);
+  color: var(--accent-bar);
+  opacity: 0.65;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-/* Bullet list */
+/* Note lines — no bullet markers, text in violet */
 .note-bullets {
   margin: 0;
   padding: 0;
   list-style: none;
   display: grid;
-  gap: 7px;
+  gap: 10px;
 }
 
 .note-bullet {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
   font-size: 15px;
-  line-height: 1.48;
-}
-
-.note-bullet::before {
-  content: '';
-  flex: none;
-  width: 6px;
-  height: 6px;
-  margin-top: 7px;
-  border-radius: 1px;
-  background: var(--card-stripe);
-  opacity: 0.7;
+  line-height: 1.5;
+  color: var(--accent-bar);
+  padding: 0;
 }
 
 /* ── Dock / save bar ──────────────────────────────────────────────────────── */
@@ -615,6 +603,16 @@ p { margin: 0; }
 .credit { margin-top: 20px; opacity: 0.55; font-size: 13px; }
 
 /* ── Print / PDF ──────────────────────────────────────────────────────────── */
+
+/*
+ * @page margin: 0 removes the browser-added print headers and footers
+ * (date/time, URL, page numbers). Body padding replaces them so content
+ * is not flush to the paper edge. Works in Chrome/Edge/Safari.
+ */
+@page {
+  margin: 0;
+}
+
 @media print {
   .masthead,
   .hero,
@@ -626,9 +624,14 @@ p { margin: 0; }
     display: none !important;
   }
 
-  body { background: #fff; color: #000; }
+  html, body {
+    background: #fff;
+    color: #000;
+    padding: 1.2cm 1.4cm;
+  }
 
-  .notes-heading { padding-top: 0; }
+  .notes-heading { padding-top: 0; color: #000; }
+  .notes-meta { color: #555; }
 
   .notes-grid {
     columns: var(--print-cols, 1);
@@ -644,7 +647,10 @@ p { margin: 0; }
     background: #fff;
   }
 
-  .note-bullet::before { background: #5b3fa6; }
+  /* Print note text in readable dark colour */
+  .note-label  { color: #5b3fa6; }
+  .note-source { color: #5b3fa6; opacity: 0.65; }
+  .note-bullet { color: #5b3fa6; }
 }
 
 /* ── Responsive ───────────────────────────────────────────────────────────── */
@@ -657,6 +663,9 @@ p { margin: 0; }
   .drop  { padding: 40px 16px; }
   .hero  { padding: 48px 0 24px; }
 
+  /* Notes grid collapses to single column on phones */
+  .notes-grid { grid-template-columns: 1fr; }
+
   .seg-row, .field { flex-direction: column; align-items: stretch; gap: 12px; }
   .seg, .field .answer { margin-left: 0; }
   .seg { align-self: stretch; }
@@ -668,3 +677,4 @@ p { margin: 0; }
 
   .actions .btn, .dock-bar .btn { flex: 1 1 100%; }
 }
+
