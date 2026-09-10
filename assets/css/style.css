@@ -156,6 +156,49 @@ body.offline .vignette {
   to   { opacity: 1; transform: translateY(0); }
 }
 
+/* Sigil spinning rings (XORN / Cicada 3301 homage) */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.sigil {
+  color: var(--accent);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 16px;
+  filter: drop-shadow(0 0 22px rgba(var(--accent-rgb), 0.4));
+  user-select: none;
+}
+
+.sigil svg {
+  width: 140px;
+  height: 140px;
+}
+
+.sigil .ring {
+  transform-origin: 100px 100px;
+  animation: spin 34s linear infinite;
+}
+
+.sigil .ring.rev {
+  animation: spin 22s linear infinite reverse;
+}
+
+.sigil .ring.fast {
+  animation: spin 14s linear infinite;
+}
+
+.hero-subtag {
+  color: var(--accent-bar);
+  font-size: 11.5px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  margin: 0 0 12px;
+  opacity: 0.85;
+  text-shadow: 0 0 10px rgba(var(--accent-rgb), 0.3);
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation: none !important;
@@ -207,6 +250,22 @@ body.offline .vignette {
   width: min(100% - 40px, var(--shell));
   margin-inline: auto;
   font-size: 15px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.glyph-mini {
+  width: 22px;
+  height: 22px;
+  color: var(--accent);
+  filter: drop-shadow(0 0 6px rgba(var(--accent-rgb), 0.5));
+  animation: grimm-pulse 4s ease-in-out infinite;
 }
 
 .wordmark {

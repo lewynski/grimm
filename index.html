@@ -24,7 +24,14 @@
     <!-- ── Header ─────────────────────────────────────────────────────────── -->
     <header class="masthead">
       <div class="masthead-in">
-        <span class="wordmark">Grimm</span>
+        <div class="brand">
+          <svg class="glyph-mini" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="20" cy="20" r="17" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 3"/>
+            <path d="M20 6 C26 12, 26 28, 20 34 C14 28, 14 12, 20 6 Z" stroke="currentColor" stroke-width="1.8" fill="rgba(124, 92, 191, 0.25)"/>
+            <circle cx="20" cy="20" r="2.5" fill="currentColor"/>
+          </svg>
+          <span class="wordmark">Grimm</span>
+        </div>
         <span class="masthead-right">
           <span class="masthead-meta" id="head-meta">Nothing uploaded yet</span>
           <button class="btn btn-small btn-quiet hidden" id="save-btn" type="button">Save as a file</button>
@@ -41,6 +48,41 @@
 
       <!-- Hero -->
       <section class="hero">
+        <!-- Spinning Sigil Emblem (XORN-style geometric rotating rings) -->
+        <div class="sigil" aria-hidden="true">
+          <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Center eye / petal glyph -->
+            <path d="M100 28 C135 60, 135 140, 100 172 C65 140, 65 60, 100 28 Z" stroke="currentColor" stroke-width="2" fill="rgba(124, 92, 191, 0.08)"/>
+            <path d="M100 52 C120 75, 120 125, 100 148 C80 125, 80 75, 100 52 Z" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 3" fill="rgba(124, 92, 191, 0.15)"/>
+            <circle cx="100" cy="100" r="6" fill="currentColor"/>
+
+            <!-- Rotating outer dashed ring 1 (clockwise) -->
+            <g class="ring">
+              <circle cx="100" cy="100" r="82" stroke="currentColor" stroke-width="1.2" stroke-dasharray="5 7" opacity="0.75"/>
+              <circle cx="100" cy="18" r="3" fill="currentColor"/>
+              <circle cx="100" cy="182" r="3" fill="currentColor"/>
+              <circle cx="18" cy="100" r="3" fill="currentColor"/>
+              <circle cx="182" cy="100" r="3" fill="currentColor"/>
+            </g>
+
+            <!-- Rotating inner ring 2 (counter-clockwise) -->
+            <g class="ring rev">
+              <circle cx="100" cy="100" r="66" stroke="currentColor" stroke-width="1" stroke-dasharray="8 12" opacity="0.6"/>
+              <path d="M100 34 L100 40 M100 160 L100 166 M34 100 L40 100 M160 100 L166 100" stroke="currentColor" stroke-width="2"/>
+            </g>
+
+            <!-- Rapid orbital radar ring 3 -->
+            <g class="ring fast">
+              <circle cx="100" cy="100" r="95" stroke="currentColor" stroke-width="0.8" stroke-dasharray="2 18" opacity="0.45"/>
+            </g>
+
+            <!-- Subtle crosshairs -->
+            <line x1="100" y1="5" x2="100" y2="195" stroke="currentColor" stroke-width="0.6" stroke-dasharray="4 4" opacity="0.3"/>
+            <line x1="5" y1="100" x2="195" y2="100" stroke="currentColor" stroke-width="0.6" stroke-dasharray="4 4" opacity="0.3"/>
+          </svg>
+        </div>
+
+        <p class="hero-subtag">&#936;&nbsp;&nbsp;Study Notes Engine &bull; Grimm v2.0&nbsp;&nbsp;&#936;</p>
         <h1>Your slides,<br /><em>as notes.</em></h1>
         <p>
           Upload the deck or handout you are studying. You get concise bullet-point
