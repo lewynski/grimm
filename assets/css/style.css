@@ -493,7 +493,7 @@ p { margin: 0; }
 .note-bullet {
   font-size: 15px;
   line-height: 1.5;
-  color: var(--accent-bar);
+  color: var(--ink);
   padding: 0;
 }
 
@@ -624,14 +624,29 @@ p { margin: 0; }
     display: none !important;
   }
 
+  /* Force the entire page to white background, black text — no dark mode */
   html, body {
-    background: #fff;
-    color: #000;
+    background: #ffffff !important;
+    color: #000000 !important;
     padding: 1.2cm 1.4cm;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 
-  .notes-heading { padding-top: 0; color: #000; }
-  .notes-meta { color: #555; }
+  /* Override all CSS variables to light/white values for print */
+  * {
+    background-color: transparent !important;
+    color: #000000 !important;
+    box-shadow: none !important;
+  }
+
+  .notes-heading {
+    padding-top: 0;
+    color: #000000 !important;
+    font-size: 24pt;
+  }
+
+  .notes-meta { color: #555555 !important; }
 
   .notes-grid {
     columns: var(--print-cols, 1);
@@ -642,15 +657,16 @@ p { margin: 0; }
   .note-card {
     break-inside: avoid;
     margin-bottom: 1em;
-    border: 1px solid #ddd;
-    border-left: 3px solid #5b3fa6;
-    background: #fff;
+    background: #ffffff !important;
+    border: 1px solid #cccccc !important;
+    border-left: 3px solid #5b3fa6 !important;
+    border-radius: 10px;
+    padding: 14px 16px 14px 18px;
   }
 
-  /* Print note text in readable dark colour */
-  .note-label  { color: #5b3fa6; }
-  .note-source { color: #5b3fa6; opacity: 0.65; }
-  .note-bullet { color: #5b3fa6; }
+  .note-label  { color: #5b3fa6 !important; font-size: 10pt; font-weight: 700; }
+  .note-source { color: #888888 !important; font-size: 9pt; }
+  .note-bullet { color: #000000 !important; font-size: 10.5pt; line-height: 1.5; }
 }
 
 /* ── Responsive ───────────────────────────────────────────────────────────── */
