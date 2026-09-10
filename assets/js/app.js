@@ -358,16 +358,16 @@
       });
     }
     if (exportPdfDownload) {
-      exportPdfDownload.addEventListener('click', function () {
+      exportPdfDownload.addEventListener('click', async function () {
         var cols = selectedColumns();
         exportPdfDownload.disabled = true;
-        exportPdfDownload.textContent = 'Opening print dialog...';
+        exportPdfDownload.textContent = 'Generating PDF...';
         try {
-          var result = GR.exporter.downloadPDF(paper, cols);
+          var result = await GR.exporter.downloadPDF(paper, cols);
           closeExportChooser();
-          say(status, result.name + ' — ' + cols + '-column layout.');
+          say(status, result.name + ' downloaded (' + cols + '-column layout).');
         } catch (err) {
-          say(status, err && err.message ? err.message : 'Could not open print dialog.', true);
+          say(status, err && err.message ? err.message : 'Could not generate the PDF.', true);
         } finally {
           exportPdfDownload.disabled = false;
           exportPdfDownload.textContent = 'Download PDF';

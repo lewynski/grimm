@@ -481,20 +481,29 @@ p { margin: 0; }
   white-space: nowrap;
 }
 
-/* Note lines — no bullet markers, text in violet */
+/* Note lines — dash prefix, spaced for easy reading */
 .note-bullets {
   margin: 0;
   padding: 0;
   list-style: none;
   display: grid;
-  gap: 10px;
+  gap: 12px;
 }
 
 .note-bullet {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
   font-size: 15px;
   line-height: 1.5;
   color: var(--ink);
   padding: 0;
+}
+
+.note-bullet::before {
+  content: '\2013\00a0\00a0';  /* – followed by two spaces */
+  flex: none;
+  font-weight: 500;
 }
 
 /* ── Dock / save bar ──────────────────────────────────────────────────────── */
@@ -694,15 +703,20 @@ p { margin: 0; }
     opacity: 1 !important;
   }
 
-  /* Plain text bullets — no markers, no colours */
+  /* Plain text bullets with dash prefix */
   .note-bullets {
-    gap: 3px;
+    gap: 5px;
   }
 
   .note-bullet {
     color: #000000 !important;
     font-size: 10pt;
     line-height: 1.45;
+  }
+
+  .note-bullet::before {
+    content: '\2013\00a0\00a0' !important;
+    color: #000000 !important;
   }
 }
 
