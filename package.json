@@ -1,0 +1,12 @@
+{
+  "name": "grimm",
+  "version": "1.0.0",
+  "description": "Turn your lecture slides into a notes reviewer.",
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,0 +1,670 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Grimm — one stylesheet, shared by the app and the offline export.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Measurements, not colours */
+:root {
+  --shell: 980px;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI Variable Text", "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  --print-cols: 1;
+}
+
+/* ── Dark theme (default) ─────────────────────────────────────────────────── */
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+  --bg:          #0a0a0a;
+  --paper:       #141414;
+  --ink:         #e8e8e8;
+  --soft:        #888893;
+  --line:        #2a2a2e;
+  --hair:        rgba(255, 255, 255, 0.10);
+  --accent:      #7c5cbf;
+  --accent-soft: rgba(124, 92, 191, 0.18);
+  --accent-bar:  #9b7fd4;
+  --right:       #34c759;
+  --right-soft:  rgba(52, 199, 89, 0.14);
+  --wrong:       #ff3b30;
+  --wrong-soft:  rgba(255, 59, 48, 0.14);
+  --idle:        #1e1e22;
+  --card-border: rgba(255, 255, 255, 0.07);
+  --card-stripe: #7c5cbf;
+}
+
+/* Offline export honours device preference */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    color-scheme: light;
+    --bg:          #f0f0f5;
+    --paper:       #ffffff;
+    --ink:         #1a1a1f;
+    --soft:        #65656e;
+    --line:        #d0d0d8;
+    --hair:        rgba(0, 0, 0, 0.08);
+    --accent:      #5b3fa6;
+    --accent-soft: rgba(91, 63, 166, 0.10);
+    --accent-bar:  #5b3fa6;
+    --right:       #248a3d;
+    --right-soft:  rgba(36, 138, 61, 0.10);
+    --wrong:       #d70015;
+    --wrong-soft:  rgba(215, 0, 21, 0.08);
+    --idle:        #e4e4ec;
+    --card-border: rgba(0, 0, 0, 0.08);
+    --card-stripe: #5b3fa6;
+  }
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+  --bg:          #f0f0f5;
+  --paper:       #ffffff;
+  --ink:         #1a1a1f;
+  --soft:        #65656e;
+  --line:        #d0d0d8;
+  --hair:        rgba(0, 0, 0, 0.08);
+  --accent:      #5b3fa6;
+  --accent-soft: rgba(91, 63, 166, 0.10);
+  --accent-bar:  #5b3fa6;
+  --right:       #248a3d;
+  --right-soft:  rgba(36, 138, 61, 0.10);
+  --wrong:       #d70015;
+  --wrong-soft:  rgba(215, 0, 21, 0.08);
+  --idle:        #e4e4ec;
+  --card-border: rgba(0, 0, 0, 0.08);
+  --card-stripe: #5b3fa6;
+}
+
+/* ── Reset ────────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 400 17px/1.5 var(--sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 { margin: 0; font-weight: 600; letter-spacing: -0.02em; }
+p { margin: 0; }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+/* ── Layout ───────────────────────────────────────────────────────────────── */
+.shell {
+  width: min(100% - 40px, var(--shell));
+  margin-inline: auto;
+}
+
+.hidden { display: none !important; }
+
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ── Header ───────────────────────────────────────────────────────────────── */
+.masthead {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: color-mix(in srgb, var(--bg) 76%, transparent);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid var(--hair);
+}
+
+.masthead-in {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  height: 48px;
+  width: min(100% - 40px, var(--shell));
+  margin-inline: auto;
+  font-size: 15px;
+}
+
+.wordmark {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--accent-bar);
+}
+
+.masthead-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.masthead-meta {
+  color: var(--soft);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Theme toggle ─────────────────────────────────────────────────────────── */
+.theme {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  appearance: none;
+  border: 1px solid var(--hair);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.theme:hover { background: var(--idle); border-color: var(--line); }
+
+/* ── Hero ─────────────────────────────────────────────────────────────────── */
+.hero {
+  padding: 72px 0 36px;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: clamp(36px, 7vw, 68px);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.034em;
+}
+
+.hero h1 em {
+  font-style: normal;
+  color: var(--accent-bar);
+}
+
+.hero p {
+  margin: 18px auto 0;
+  max-width: 28em;
+  color: var(--soft);
+  font-size: clamp(16px, 2.2vw, 20px);
+  line-height: 1.5;
+}
+
+/* ── Section spacing ──────────────────────────────────────────────────────── */
+.section { margin-top: 28px; }
+
+/* ── Drop zone ────────────────────────────────────────────────────────────── */
+.drop {
+  display: block;
+  width: 100%;
+  padding: 60px 28px;
+  text-align: center;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: border-color 0.18s ease, background 0.18s ease;
+}
+
+.drop:hover { border-color: var(--soft); }
+
+.drop.is-hot {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.drop-title {
+  font-size: clamp(20px, 3vw, 26px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.drop-note {
+  margin: 10px auto 24px;
+  max-width: 26em;
+  color: var(--soft);
+  font-size: 15px;
+}
+
+/* ── File list ────────────────────────────────────────────────────────────── */
+.files {
+  margin: 22px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.file {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+  padding: 13px 2px;
+  border-top: 1px solid var(--hair);
+  font-size: 15px;
+}
+
+.file-name { font-weight: 500; overflow-wrap: anywhere; }
+
+.file-meta {
+  margin-left: auto;
+  color: var(--soft);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.file-warn {
+  flex-basis: 100%;
+  color: var(--wrong);
+  font-size: 13px;
+}
+
+/* ── Buttons ──────────────────────────────────────────────────────────────── */
+.btn {
+  appearance: none;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #ffffff;
+  font: 500 17px/1 var(--sans);
+  padding: 14px 26px;
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.12s ease;
+}
+
+.btn:hover { opacity: 0.86; }
+.btn:active { transform: scale(0.985); }
+.btn[disabled] { opacity: 0.35; cursor: not-allowed; transform: none; }
+
+.btn-quiet {
+  background: transparent;
+  color: var(--accent-bar);
+  border-color: var(--line);
+}
+
+.btn-small { font-size: 14px; padding: 9px 18px; }
+
+/* ── Options panel ────────────────────────────────────────────────────────── */
+.panel {
+  background: var(--paper);
+  border: 1px solid var(--hair);
+  border-radius: 20px;
+  padding: 28px;
+}
+
+.panel h2 {
+  font-size: clamp(20px, 2.8vw, 26px);
+  letter-spacing: -0.02em;
+}
+
+.panel-note {
+  margin-top: 8px;
+  color: var(--soft);
+  font-size: 15px;
+}
+
+/* ── Segmented control (order mode) ──────────────────────────────────────── */
+.seg-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 15px 2px;
+  border-top: 1px solid var(--hair);
+  flex-wrap: wrap;
+}
+
+.seg-label {
+  font-weight: 500;
+}
+
+.seg-hint {
+  display: block;
+  color: var(--soft);
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.seg {
+  display: inline-flex;
+  gap: 2px;
+  margin-left: auto;
+  padding: 2px;
+  background: var(--idle);
+  border-radius: 999px;
+}
+
+.seg-btn {
+  appearance: none;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: 400 15px/1 var(--sans);
+  padding: 9px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.seg-btn[aria-pressed="true"] {
+  background: var(--paper);
+  font-weight: 500;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.16);
+}
+
+/* ── Field rows ───────────────────────────────────────────────────────────── */
+.field {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 16px;
+  padding: 15px 2px;
+  border-top: 1px solid var(--hair);
+}
+
+.field-label { font-weight: 500; }
+
+.field .answer {
+  width: auto;
+  min-width: 8em;
+  max-width: 14em;
+  margin-left: auto;
+}
+
+.answer {
+  width: 100%;
+  max-width: 24em;
+  padding: 12px 15px;
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  font: 400 17px/1.4 var(--sans);
+}
+
+/* ── Actions row ──────────────────────────────────────────────────────────── */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  margin-top: 26px;
+}
+
+/* ── Progress track ───────────────────────────────────────────────────────── */
+.track {
+  height: 4px;
+  border-radius: 999px;
+  background: var(--idle);
+  overflow: hidden;
+  margin-top: 16px;
+}
+
+.track-fill {
+  height: 100%;
+  width: 0;
+  background: var(--accent);
+  transition: width 0.35s ease;
+}
+
+/* ── Status text ──────────────────────────────────────────────────────────── */
+.status {
+  margin-top: 14px;
+  color: var(--soft);
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+}
+
+.status.is-bad { color: var(--wrong); }
+
+/* ── Notes view ───────────────────────────────────────────────────────────── */
+.notes-heading {
+  font-size: clamp(26px, 4.5vw, 40px);
+  font-weight: 700;
+  letter-spacing: -0.028em;
+  margin-bottom: 8px;
+  padding-top: 36px;
+}
+
+.notes-meta {
+  color: var(--soft);
+  font-size: 14px;
+  margin-bottom: 28px;
+}
+
+/* Grid of note cards */
+.notes-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+}
+
+/* ── Note card ────────────────────────────────────────────────────────────── */
+.note-card {
+  background: var(--paper);
+  border: 1px solid var(--card-border);
+  border-left: 3px solid var(--card-stripe);
+  border-radius: 14px;
+  padding: 18px 20px 18px 22px;
+  break-inside: avoid;
+}
+
+.note-header {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.note-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent-bar);
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+
+.note-source {
+  font-size: 12px;
+  color: var(--soft);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Bullet list */
+.note-bullets {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 7px;
+}
+
+.note-bullet {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 15px;
+  line-height: 1.48;
+}
+
+.note-bullet::before {
+  content: '';
+  flex: none;
+  width: 6px;
+  height: 6px;
+  margin-top: 7px;
+  border-radius: 1px;
+  background: var(--card-stripe);
+  opacity: 0.7;
+}
+
+/* ── Dock / save bar ──────────────────────────────────────────────────────── */
+.dock-bar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 36px 0 16px;
+  padding-top: 20px;
+  border-top: 1px solid var(--hair);
+  flex-wrap: wrap;
+}
+
+/* ── Export dialog ────────────────────────────────────────────────────────── */
+.export-dialog {
+  pointer-events: auto;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.export-card {
+  width: min(520px, 100%);
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--hair);
+  border-radius: 18px;
+  padding: 28px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.3);
+}
+
+.export-card h2 { margin: 0 0 8px; font-size: 22px; }
+.export-note { margin: 0 0 22px; opacity: 0.75; font-size: 15px; }
+
+.export-options {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.export-option {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 15px 16px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  transition: border-color 0.14s ease;
+}
+
+.export-option:hover { border-color: var(--accent-bar); }
+.export-option:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.export-option strong { display: block; margin-bottom: 3px; }
+.export-option span { opacity: 0.7; font-size: 14px; }
+
+.pdf-layout {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 18px;
+}
+
+.pdf-layout legend { padding: 0 6px; font-weight: 600; font-size: 14px; }
+
+.pdf-layout label {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin: 6px 14px 6px 0;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.export-actions {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.pdf-layout[hidden] { display: none !important; }
+
+/* ── Footer ───────────────────────────────────────────────────────────────── */
+.footer {
+  margin-top: 60px;
+  padding: 36px 0 52px;
+  border-top: 1px solid var(--hair);
+  color: var(--soft);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.footer p + p { margin-top: 12px; }
+
+.footer a { color: var(--accent-bar); text-decoration: none; }
+.footer a:hover { text-decoration: underline; }
+
+.credit { margin-top: 20px; opacity: 0.55; font-size: 13px; }
+
+/* ── Print / PDF ──────────────────────────────────────────────────────────── */
+@media print {
+  .masthead,
+  .hero,
+  .section,
+  .dock-bar,
+  .footer,
+  .export-dialog,
+  .no-print {
+    display: none !important;
+  }
+
+  body { background: #fff; color: #000; }
+
+  .notes-heading { padding-top: 0; }
+
+  .notes-grid {
+    columns: var(--print-cols, 1);
+    column-gap: 1.5em;
+    display: block;
+  }
+
+  .note-card {
+    break-inside: avoid;
+    margin-bottom: 1em;
+    border: 1px solid #ddd;
+    border-left: 3px solid #5b3fa6;
+    background: #fff;
+  }
+
+  .note-bullet::before { background: #5b3fa6; }
+}
+
+/* ── Responsive ───────────────────────────────────────────────────────────── */
+@media (max-width: 620px) {
+  .shell, .masthead-in {
+    width: min(100% - 24px, var(--shell));
+  }
+
+  .panel { padding: 20px 16px; border-radius: 16px; }
+  .drop  { padding: 40px 16px; }
+  .hero  { padding: 48px 0 24px; }
+
+  .seg-row, .field { flex-direction: column; align-items: stretch; gap: 12px; }
+  .seg, .field .answer { margin-left: 0; }
+  .seg { align-self: stretch; }
+  .seg-btn { flex: 1 1 0; padding: 11px 6px; text-align: center; }
+  .field .answer { width: 100%; max-width: none; }
+
+  .file-meta { margin-left: 0; }
+  .footer { padding: 28px 0 40px; }
+
+  .actions .btn, .dock-bar .btn { flex: 1 1 100%; }
+}

@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Grimm</title>
+    <meta
+      name="description"
+      content="Turn your lecture slides and handouts into a bullet-point notes reviewer you can save and study offline."
+    />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <script>
+      /* Before first paint — honour a remembered light choice. */
+      try {
+        var _p = localStorage.getItem('gr-theme');
+        document.documentElement.setAttribute('data-theme', _p === 'light' ? 'light' : 'dark');
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <!-- ── Header ─────────────────────────────────────────────────────────── -->
+    <header class="masthead">
+      <div class="masthead-in">
+        <span class="wordmark">Grimm</span>
+        <span class="masthead-right">
+          <span class="masthead-meta" id="head-meta">Nothing uploaded yet</span>
+          <button class="btn btn-small btn-quiet hidden" id="save-btn" type="button">Save as a file</button>
+          <button class="theme" id="theme" type="button" title="Switch to light">
+            <span aria-hidden="true" id="theme-mark">&#9789;</span>
+            <span class="sr">Switch theme</span>
+          </button>
+        </span>
+      </div>
+    </header>
+
+    <!-- ── Main ───────────────────────────────────────────────────────────── -->
+    <main class="shell" id="app">
+
+      <!-- Hero -->
+      <section class="hero">
+        <h1>Your slides,<br /><em>as notes.</em></h1>
+        <p>
+          Upload the deck or handout you are studying. You get concise bullet-point
+          notes drawn from every slide, in the order they came or shuffled into a
+          random run — saved as one offline file.
+        </p>
+      </section>
+
+      <!-- Upload zone -->
+      <section class="section">
+        <div class="drop" id="drop">
+          <p class="drop-title">Drop your files here</p>
+          <p class="drop-note">
+            PowerPoint, PDF, Word, or plain text. Add as many as you like,
+            from as many subjects as you like.
+          </p>
+          <input
+            class="sr"
+            id="files"
+            type="file"
+            multiple
+            accept=".pdf,.pptx,.pptm,.docx,.docm,.txt,.md,.markdown,.csv"
+          />
+          <label class="btn" for="files" id="pick">Choose files</label>
+        </div>
+
+        <ul class="files hidden" id="filelist"></ul>
+        <p class="status" id="read-status" role="status" aria-live="polite"></p>
+      </section>
+
+      <!-- Options panel (shown after upload) -->
+      <section class="section hidden" id="opt-panel">
+        <div class="panel">
+          <h2>How do you want your notes?</h2>
+          <p class="panel-note">Choose an order, then press the button.</p>
+
+          <!-- Order mode -->
+          <div class="seg-row">
+            <div>
+              <span class="seg-label">Order</span>
+              <span class="seg-hint">How the notes are arranged</span>
+            </div>
+            <div class="seg" id="order-seg" role="group" aria-label="Note order">
+              <button class="seg-btn" type="button" data-mode="chronological" aria-pressed="true">
+                Chronological
+              </button>
+              <button class="seg-btn" type="button" data-mode="randomised" aria-pressed="false">
+                Randomised
+              </button>
+            </div>
+          </div>
+
+          <!-- Access code (hidden until server returns 401) -->
+          <div class="field hidden" id="code-field">
+            <div>
+              <label class="field-label" for="code">Access code</label>
+              <div class="seg-hint">This copy is locked. Ask whoever set it up for the code.</div>
+            </div>
+            <input class="answer" id="code" type="text" autocomplete="off" spellcheck="false" />
+          </div>
+
+          <!-- Action row -->
+          <div class="actions">
+            <button class="btn" id="make" type="button">Make my notes</button>
+          </div>
+
+          <div class="track hidden" id="track">
+            <div class="track-fill" id="track-fill"></div>
+          </div>
+          <p class="status" id="status" role="status" aria-live="polite"></p>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ── Export format chooser ───────────────────────────────────────────── -->
+    <div
+      class="export-dialog hidden"
+      id="export-chooser"
+      aria-hidden="true"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="export-title"
+    >
+      <div class="export-card">
+        <h2 id="export-title">Save your notes</h2>
+        <p class="export-note">Choose how you want to keep this reviewer.</p>
+
+        <div class="export-options">
+          <button class="export-option" id="export-html" type="button">
+            <strong>HTML Reviewer</strong>
+            <span>A self-contained offline file. Open it anywhere, no internet needed.</span>
+          </button>
+
+          <button class="export-option" id="export-pdf" type="button">
+            <strong>PDF</strong>
+            <span>Print or save as PDF. Choose a 1-, 2-, or 3-column layout.</span>
+          </button>
+        </div>
+
+        <fieldset class="pdf-layout hidden" id="pdf-layout">
+          <legend>PDF layout</legend>
+          <label><input type="radio" name="pdf-layout" value="1" checked /> Single column</label>
+          <label><input type="radio" name="pdf-layout" value="2" /> 2 columns</label>
+          <label><input type="radio" name="pdf-layout" value="3" /> 3 columns</label>
+        </fieldset>
+
+        <div class="export-actions">
+          <button class="btn btn-quiet" id="export-cancel" type="button">Cancel</button>
+          <button class="btn hidden" id="export-pdf-download" type="button">Download PDF</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Footer ─────────────────────────────────────────────────────────── -->
+    <footer class="footer shell">
+      <p>
+        Files are read in your browser. Only the text found in them is sent out,
+        and only to write the notes. Everything else stays on your device.
+      </p>
+      <p>
+        For educational use only. Study from it — do not submit it as your own work,
+        and check anything it says against your own material before you rely on it.
+        This is a static website: it holds no accounts and keeps no profiles.
+      </p>
+      <p>
+        Concerns or a bug to report:
+        <a href="mailto:report@jonlewynv.online">report@jonlewynv.online</a><br />
+        Website: <a href="https://www.jonlewynv.online/" rel="noopener">www.jonlewynv.online</a>
+      </p>
+      <p class="credit">Developer: Jon Lewyn V. Tanggaro</p>
+    </footer>
+
+    <!-- ── Scripts ────────────────────────────────────────────────────────── -->
+    <script src="assets/js/zip.js" defer></script>
+    <script src="assets/js/extract.js" defer></script>
+    <script src="assets/js/generate.js" defer></script>
+    <script src="assets/js/notes.js" defer></script>
+    <script src="assets/js/exporter.js" defer></script>
+    <script src="assets/js/app.js" defer></script>
+  </body>
+</html>
