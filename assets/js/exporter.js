@@ -233,24 +233,32 @@
     var h2p = await loadHtml2Pdf();
     var content = buildPdfContent(paper, cols);
 
-    // Temporarily add to DOM for rendering (hidden)
-    content.style.position = 'fixed';
-    content.style.left = '-9999px';
-    content.style.top = '0';
-    content.style.width = '190mm'; // A4 minus margins
+    /*
+     * html2canvas needs the element to be in the render tree and visible.
+     * We place it behind everything with z-index:-1 and cover the screen
+     * with an overlay so the user sees "Generating PDF..." instead of
+     * raw content flashing. After capture, both are removed.
+     */
+    var overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.6); display:grid; place-items:center; color:#fff; font:600 18px/1 sans-serif;';
+    overlay.textContent = 'Generating PDF...';
+    document.body.appendChild(overlay);
+
+    content.style.cssText = 'position:absolute; left:0; top:0; z-index:-1; width:190mm; background:#fff; padding:10mm;';
     document.body.appendChild(content);
 
     try {
       await h2p(content, {
-        margin:       [12, 12, 12, 12],
+        margin:       [10, 10, 10, 10],
         filename:     name,
         image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
+        html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#ffffff', scrollY: 0, windowWidth: content.scrollWidth },
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
         pagebreak:    { mode: ['avoid-all', 'css'] },
       }).save();
     } finally {
       document.body.removeChild(content);
+      document.body.removeChild(overlay);
     }
 
     return { name: name };
